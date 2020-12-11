@@ -17,24 +17,21 @@ public class RetainedFragment extends Fragment {
     private static volatile String data = "";
 
     {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if(socket == null || !socket.isConnected()){
-                        socket = new Socket(HOST, 8888);
-                    }
-                    InputStream is = socket.getInputStream();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    int size = 0;
-                    char[] cbuf =  new char[1024];
-                    while((size = br.read(cbuf, 0, cbuf.length))!=-1)
-                    {
-                        onDownloadFinished(new String(cbuf,0,size));
-                    }
-                } catch (Throwable e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                if(socket == null || !socket.isConnected()){
+                    socket = new Socket(HOST, 8888);
                 }
+                InputStream is = socket.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                int size = 0;
+                char[] cbuf =  new char[1024];
+                while((size = br.read(cbuf, 0, cbuf.length))!=-1)
+                {
+                    onDownloadFinished(new String(cbuf,0,size));
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }).start();
     }
@@ -45,19 +42,16 @@ public class RetainedFragment extends Fragment {
     }
 
     void bind_pressed(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (socket == null || !socket.isConnected()){
-                        socket = new Socket(HOST, 8888);
-                    }
-                    PrintWriter pw = new PrintWriter(new OutputStreamWriter(
-                            socket.getOutputStream()), true);
-                    pw.println("bind_pressed!!!");
-                } catch (Throwable e) {
-                    e.printStackTrace();
+        new Thread(() -> {
+            try {
+                if (socket == null || !socket.isConnected()){
+                    socket = new Socket(HOST, 8888);
                 }
+                PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+                        socket.getOutputStream()), true);
+                pw.println("bind_pressed!!!");
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
         }).start();
     }

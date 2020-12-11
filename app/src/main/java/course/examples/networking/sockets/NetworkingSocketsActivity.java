@@ -41,12 +41,7 @@ public class NetworkingSocketsActivity extends Activity implements RetainedFragm
 
     @Override
     public void onDownloadFinished(final String result) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mTextView.setText(result);
-            }
-        });
+        this.runOnUiThread(() -> { mTextView.setText(result);});
     }
 
 
